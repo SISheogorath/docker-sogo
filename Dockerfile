@@ -34,6 +34,9 @@ RUN echo "untar SOPE sources" \
       libmemcached-dev \
       libcurl4-openssl-dev \
       tzdata \
+      zip \
+      zlib1g-dev \
+      ssmtp \
    && echo "compiling sope & sogo" \
    && cd /tmp/SOPE  \
    && ./configure --with-gnustep --enable-debug --disable-strip  \
@@ -51,10 +54,12 @@ RUN echo "untar SOPE sources" \
    && echo "create directories and enforce permissions" \
    && install -o sogo -g sogo -m 755 -d /var/run/sogo  \
    && install -o sogo -g sogo -m 750 -d /var/spool/sogo  \
-   && install -o sogo -g sogo -m 750 -d /var/log/sogo
+   && install -o sogo -g sogo -m 750 -d /var/log/sogo \
+   && chown -R sogo:sogo /etc/ssmtp/
    
 # add sogo.conf
 ADD sogo.default.conf /etc/sogo/sogo.conf
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 VOLUME /usr/local/lib/GNUstep/SOGo/WebServerResources
 
@@ -64,6 +69,8 @@ USER sogo
 
 # load env
 RUN . /usr/share/GNUstep/Makefiles/GNUstep.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 CMD [ "sogod", "-WONoDetach", "YES", "-WOPort", "20000", "-WOLogFile", "-", "-WOPidFile", "/tmp/sogo.pid"]
 
