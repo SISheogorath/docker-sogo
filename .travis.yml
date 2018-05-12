@@ -5,7 +5,7 @@ services:
 
 env:
   global:
-    - SOGO_VERSION=v3.2.10
+    - SOGO_VERSION=3.2.10
 
 before_install:
   - sudo apt-get -qq update
