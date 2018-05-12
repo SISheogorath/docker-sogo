@@ -14,7 +14,7 @@ before_install:
 
 script:
   # Initial build with default parameters
-  - docker build --build-arg VERSION="${SOGO_VERSION}" -t sogo:testing .
+  - docker build --build-arg version="${SOGO_VERSION}" -t sogo:testing .
 
 after_success:
   # Push successful builds of the master branch to Docker Hub
